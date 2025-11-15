@@ -1,0 +1,40 @@
+services:
+  postgres:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_DB: habit_tracker
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  habit-data-service:
+    build: ./habit_data_service
+    ports:
+      - "5000:4000"
+    environment:
+      - DB_HOST=postgres
+      - DB_USER=postgres
+      - DB_PASSWORD=password
+      - DB_NAME=habit_tracker
+      - DB_PORT=5432
+    depends_on:
+      - postgres
+
+  notification-service:
+    build: ./notification_services
+    ports:
+      - "5001:4001"
+
+  habit-tracker:
+    build: ./habit_tracker
+    ports:
+      - "3000:80"
+    depends_on:
+      - habit-data-service
+      - notification-service
+
+volumes:
+  postgres_data:
