@@ -1,14 +1,13 @@
-const HABIT_API_BASE = 'http://localhost:5000/api';
-const NOTIFICATION_API_BASE = 'http://localhost:5001/api';
+const API_BASE = '';
 
 export const habitAPI = {
   async getHabits() {
-    const response = await fetch(`${HABIT_API_BASE}/habits`);
+    const response = await fetch(`${API_BASE}/api/habits/habits`);
     return await response.json();
   },
 
   async createHabit(habitData) {
-    const response = await fetch(`${HABIT_API_BASE}/habits`, {
+    const response = await fetch(`${API_BASE}/api/habits/habits`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -19,7 +18,7 @@ export const habitAPI = {
   },
 
   async updateHabit(id, habitData) {
-    const response = await fetch(`${HABIT_API_BASE}/habits/${id}`, {
+    const response = await fetch(`${API_BASE}/api/habits/habits/${id}`, {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
@@ -30,15 +29,16 @@ export const habitAPI = {
   },
 
   async deleteHabit(id) {
-    const response = await fetch(`${HABIT_API_BASE}/habits/${id}`, {
+    const response = await fetch(`${API_BASE}/api/habits/habits/${id}`, {
       method: 'DELETE',
     });
     return await response.json();
   }
 };
+
 export const notificationAPI = {
   async sendNotification(notificationData) {
-    const response = await fetch(`${NOTIFICATION_API_BASE}/send-notification`, {
+    const response = await fetch(`${API_BASE}/api/notifications/send-notification`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
