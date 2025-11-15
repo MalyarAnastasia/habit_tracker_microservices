@@ -28,6 +28,24 @@ app.get('/api/health', (req, res) => {
   res.json({ status: 'Notification service is running' });
 });
 
+// Health check endpoint
+app.get('/health', (req, res) => {
+  res.status(200).json({
+    status: 'healthy',
+    service: 'notification-service',
+    timestamp: new Date().toISOString()
+  });
+});
+
+// Health check для корневого пути
+app.get('/', (req, res) => {
+  res.json({
+    status: 'running',
+    service: 'notification-service',
+    timestamp: new Date().toISOString()
+  });
+});
+
 app.listen(PORT, () => {
   console.log(`Notification Service running on port ${PORT}`);
 });

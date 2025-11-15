@@ -12,7 +12,7 @@ const pool = new Pool({
   user: process.env.DB_USER || 'postgres',
   host: process.env.DB_HOST || 'localhost',
   database: process.env.DB_NAME || 'habit_tracker',
-  password: process.env.DB_PASSWORD || 'nastya2005',
+  password: process.env.DB_PASSWORD || 'password',
   port: process.env.DB_PORT || 5432,
 });
 
@@ -159,6 +159,29 @@ app.delete('/api/habits/:id', async (req, res) => {
     });
   }
 });
+
+// Health check endpoint
+app.get('/health', async (req, res) => {
+  try {
+    // Проверка подключения к БД
+    await pool.query('SELECT 1');
+    res.status(200).json({
+      status: 'healthy',
+      service: 'habit-data-service',
+      timestamp: new Date().toISOString(),
+      database: 'connected'
+    });
+  } catch (error) {
+    res.status(500).json({
+      status: 'unhealthy',
+      service: 'habit-data-service',
+      timestamp: new Date().toISOString(),
+      database: 'disconnected',
+      error: error.message
+    });
+  }
+});
+
 
 app.listen(PORT, () => {
   console.log(`Habit Data Service running on port ${PORT}`);
